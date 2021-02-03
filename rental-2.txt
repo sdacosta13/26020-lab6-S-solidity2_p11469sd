@@ -1,0 +1,33 @@
+contract Rental {
+
+uint256 public deposit = 1 wei;
+
+address resource_owner;
+bool resource_available;
+
+constructor() public {
+resource_available = true;
+}
+
+function rent_out_resource() external payable {
+require(resource_available == true);
+require(msg.value == deposit);
+resource_owner = msg.sender;
+resource_available = false;
+}
+
+function retrieve_resource() external {
+require(resource_available == false && msg.sender == resource_owner);
+(bool sucess,) = resource_owner.call.value(deposit)("");
+require(sucess);
+resource_available = true;
+}
+
+function report_balance() external view returns(uint256) {
+return address(this).balance;
+}
+
+receive() external payable {
+}
+
+}

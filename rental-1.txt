@@ -1,0 +1,21 @@
+contract Rental {
+
+address resource_owner;
+bool resource_available;
+
+constructor() public {
+resource_available = true;
+}
+
+function rent_out_resource() external {
+require(resource_available == true);
+resource_owner = msg.sender;
+resource_available = false;
+}
+
+function retrieve_resource() external {
+require(resource_available == false && msg.sender == resource_owner);
+resource_available = true;
+}
+
+}
